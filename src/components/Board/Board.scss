@@ -1,44 +1,46 @@
 .board {
   $board-size: 3; // assume square board
 
-  background-color: #ccc;
   display: grid;
-  grid-template-columns: repeat($board-size, 1fr);
-  grid-template-rows: repeat($board-size, 1fr);
-  padding: 16px;
+  grid-template-columns: repeat($board-size, max-content);
+  grid-template-rows: repeat($board-size, max-content);
+  border: 4px solid black;
 
   &__cell {
-    width: 100%;
     background-color: white;
     border: 4px solid black;
     position: relative;
-    padding: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 60px;
+    height: 60px;
+  }
 
-    label {
-      display: block;
-      width: 100%;
-      text-align: center;
-    }
+  &__cell-control {
+    opacity: 0;
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     
-    input {
-      opacity: 0;
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-    }
-
-    input:checked:not(:disabled) + label {
-      background-color: #ff0000af;
+    &:focus:not(:disabled) + .board__cell-label::before,
+    &:checked:not(:disabled) + .board__cell-label::before {
+      display: block;
+      content: '⭕️';
     }
   }
 
-  button {
-    margin: 24px;
-    grid-column: 2;
+  &__cell-label {
+    display: block;
+  }
+
+  &__actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-around;
   }
 }

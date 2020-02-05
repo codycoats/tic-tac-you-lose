@@ -21,11 +21,12 @@ const WINNING_BOARDS = [
 // This could be randomized to be seem more "fair"
 const INTIAL_BOARD = [BOT_VALUE, ...Array((BOARD_SIZE* BOARD_SIZE) - 1)];
 
+const BOARD_REDUCER_ACTION_RESET = 'reset';
+
 const boardReducer = (state, action) => {
-  console.log("boardreduce", state, action)
   const type = action.type;
 
-  if(type === 'reset') {
+  if(type === BOARD_REDUCER_ACTION_RESET) {
     return [...INTIAL_BOARD];
   }
 
@@ -131,12 +132,12 @@ const Board = () => {
   const [boardState, dispatch] = useReducer(boardReducer, Array.apply(undefined, [...INTIAL_BOARD]));
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { value } = e.target['board'];
+    const { value } = e.target[RADIO_GROUP_NAME];
     dispatch({type: parseInt(value, 10)}) 
   }
   const handleReset = (e) => {
     e.preventDefault();
-    dispatch({type: 'reset'})
+    dispatch({type: BOARD_REDUCER_ACTION_RESET})
   }
 
   const winner = hasBotWon(boardState);
@@ -154,23 +155,23 @@ const Board = () => {
 
         if(cell === PLAYER_VALUE) {
           cellMarkup = (
-            <div className="board__cell board__cell--X" key={index}>
-              <input type="radio" id={id} name={RADIO_GROUP_NAME} value={index} disabled />
-              <label htmlFor={id}>⭕️</label>
+            <div className="board__cell" key={index}>
+              <input className="board__cell-control" type="radio" id={id} name={RADIO_GROUP_NAME} value={index} disabled />
+              <label className="board__cell-label" htmlFor={id}>⭕️</label>
             </div>
           );
         } else if( cell === BOT_VALUE) {
           cellMarkup = (
-            <div className="board__cell board-cell--O" key={index}>
-              <input type="radio" id={id} name={RADIO_GROUP_NAME} value={index} disabled />
-              <label htmlFor={id}>❌</label>
+            <div className="board__cell" key={index}>
+              <input className="board__cell-control" type="radio" id={id} name={RADIO_GROUP_NAME} value={index} disabled />
+              <label className="board__cell-label" htmlFor={id}>❌</label>
             </div>
           );
         } else {
           cellMarkup = (
             <div className="board__cell" key={index}>
-              <input type="radio" id={id} name={RADIO_GROUP_NAME} value={index}/>
-              <label htmlFor={id}>🔲</label>
+              <input className="board__cell-control" type="radio" id={id} name={RADIO_GROUP_NAME} value={index}/>
+              <label className="board__cell-label" htmlFor={id}></label>
             </div>
           );
         }
@@ -178,8 +179,17 @@ const Board = () => {
         return cellMarkup;
       })}
 
-      <button onClick={handleReset}>Give up!</button>
-      {(winner || draw) ? <button onClick={handleReset}>Lose again</button> : <button type="submit">Submit</button> }
+      <div className="board__actions">
+        {(winner || draw) ? 
+          <button className="board__action" onClick={handleReset}>Lose again</button> :
+          (
+            <>
+              <button className="board__action" onClick={handleReset}>Give up!</button>
+              <button className="board__action" type="submit">Submit</button> 
+            </>
+          )
+        }
+      </div>
     </form>
     </>
   )
