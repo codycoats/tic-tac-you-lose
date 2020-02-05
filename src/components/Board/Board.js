@@ -3,20 +3,49 @@ import React, { useReducer } from 'react';
 const RADIO_GROUP_NAME = 'board' 
 const BOARD_SIZE = 3;
 
+const BOT_VALUE = -1;
+const PLAYER_VALUE = 1;
+
+const WINNING_BOARDS = [
+  [0,1,2],
+  [3,4,5],
+  [6,7,8],
+  [0,4,8],
+  [2,4,6],
+  [0,3,6],
+  [1,4,7],
+  [2,5,8]
+];
+
+// We start the intial board with the bot playing in top-left corner
+// This could be randomized to be seem more "fair"
+const INTIAL_BOARD = [BOT_VALUE, ...Array((BOARD_SIZE* BOARD_SIZE) - 1)];
+
 const boardReducer = (state, action) => {
+  console.log("boardreduce", state, action)
   const type = action.type;
 
-  // User didn't say anything
-  if(type === 'foo') {
+  if(type === 'reset') {
+    return [...INTIAL_BOARD];
+  }
 
+  if(Number.isNaN(type)) {
+    return state;
   }
 
   // Add user's move
+  const botMoves = [];
+  const userMoves = [];
   const newState = state.map((cell, index) => {
     let result = cell;
 
     if(index === type) {
-      result = 1;
+      result = PLAYER_VALUE;
+      userMoves.push(index)
+    } else if(cell === BOT_VALUE ) {
+      botMoves.push(index);
+    } else if ( cell === PLAYER_VALUE ) {
+      userMoves.push(index)
     }
 
     return result;
@@ -24,73 +53,117 @@ const boardReducer = (state, action) => {
 
   // Add bot's move
   const stateWithBot = [...newState];
-  for(let i = 0; i < stateWithBot.length; i++) {
-    if(stateWithBot[i] === undefined) {
-      stateWithBot[i] = -1;
-      break;
+  let newBotMove;
+
+  // Block user from winning
+  if(userMoves.length >= 2) {
+    for(let i = 0; i < WINNING_BOARDS.length; i++) {
+      const winningBoard = [...WINNING_BOARDS[i]];
+  
+      userMoves.forEach((value) => {
+        const moveInBoard = winningBoard.indexOf(value);
+  
+        if(moveInBoard !== -1) {
+          winningBoard.splice(moveInBoard, 1);
+        }
+      })
+      
+      if(winningBoard.length === 1 && stateWithBot[winningBoard[0]] === undefined) {
+        newBotMove = winningBoard[0];
+        break;
+      }
     }
   }
+  
+  // Check if there a potential win
+  if(botMoves.length >= 2 && !newBotMove) {
+    for(let i = 0; i < WINNING_BOARDS.length; i++) {
+      const winningBoard = [...WINNING_BOARDS[i]];
+  
+      botMoves.forEach((value) => {
+        const moveInBoard = winningBoard.indexOf(value);
+  
+        if(moveInBoard !== -1) {
+          winningBoard.splice(moveInBoard, 1);
+        }
+      })
+      
+      if(winningBoard.length === 1 && stateWithBot[winningBoard[0]] === undefined) {
+        newBotMove = winningBoard[0];
+        break;
+      }
+    }
+  } 
+  
+  // Otherwise pick a corner
+  if(!newBotMove) {
+    const corners = [0, 2, 6, 8];
+    for(let i = 0; i < corners.length; i++) {
+      let corner = stateWithBot[corners[i]];
+
+      if(corner === undefined) {
+        newBotMove = corners[i];
+        break;
+      }
+    }
+  }
+
+  if(!newBotMove) {
+    console.log("still haven't found a bot move")
+  }
+
+  stateWithBot[newBotMove] = BOT_VALUE;
 
   return stateWithBot;
 }
 
-const isWinningBoard = (board) => {
-  const winningBoards = [
-    [0,1,2],
-    [3,4,5],
-    [6,7,8],
-    [0,4,8],
-    [2,4,6],
-    [0,3,6],
-    [1,4,7],
-    [2,5,8]
-  ];
-
-  const found = winningBoards.find((winner) => {
+const hasBotWon = (board) => {
+  const found = WINNING_BOARDS.find((winner) => {
     return winner.reduce((prev, current, index) => {
-      return prev && board[index] === -1;
-    })
+      return prev && board[current] === BOT_VALUE;
+    }, true)
   });
 
   return Boolean(found);
 }
 
-const INTIAL_BOARD = [-1, ...Array((BOARD_SIZE* BOARD_SIZE) -1)];
-
 const Board = () => {
-  const [boardState, dispatch] = useReducer(boardReducer, Array.apply(undefined, INTIAL_BOARD));
-
+  const [boardState, dispatch] = useReducer(boardReducer, Array.apply(undefined, [...INTIAL_BOARD]));
   const handleSubmit = (e) => {
     e.preventDefault();
     const { value } = e.target['board'];
     dispatch({type: parseInt(value, 10)}) 
   }
-
-  // Detect boardState as 'won'
-  if(isWinningBoard(boardState)) {
-    return (<h1>You lose, told you!</h1>)
+  const handleReset = (e) => {
+    e.preventDefault();
+    dispatch({type: 'reset'})
   }
+
+  const winner = hasBotWon(boardState);
+  const draw = !winner && boardState.indexOf(undefined) === -1;
 
   return (
     <>
+    {winner && <h2>You lose, told you!</h2>}
+    {draw && <h2>Fine, well at least I didn't lose.</h2>}
     <form className="board" onSubmit={handleSubmit}>
 
       {boardState.map((cell, index) => {
         const id = `cell-${index}`;
         let cellMarkup;
 
-        if(cell === 1) {
+        if(cell === PLAYER_VALUE) {
           cellMarkup = (
             <div className="board__cell board__cell--X" key={index}>
               <input type="radio" id={id} name={RADIO_GROUP_NAME} value={index} disabled />
-              <label htmlFor={id}>❌</label>
+              <label htmlFor={id}>⭕️</label>
             </div>
           );
-        } else if( cell === -1) {
+        } else if( cell === BOT_VALUE) {
           cellMarkup = (
             <div className="board__cell board-cell--O" key={index}>
               <input type="radio" id={id} name={RADIO_GROUP_NAME} value={index} disabled />
-              <label htmlFor={id}>⭕️</label>
+              <label htmlFor={id}>❌</label>
             </div>
           );
         } else {
@@ -105,9 +178,8 @@ const Board = () => {
         return cellMarkup;
       })}
 
-      <button type="submit">
-        Submit
-      </button>
+      <button onClick={handleReset}>Give up!</button>
+      {(winner || draw) ? <button onClick={handleReset}>Lose again</button> : <button type="submit">Submit</button> }
     </form>
     </>
   )
