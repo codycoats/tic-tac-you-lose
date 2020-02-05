@@ -15,6 +15,10 @@
     justify-content: center;
     width: 60px;
     height: 60px;
+
+    &--filled {
+      background-color: #ccc;
+    }
   }
 
   &__cell-control {
@@ -26,6 +30,11 @@
     bottom: 0;
     left: 0;
     right: 0;
+
+    &:focus:not(:disabled) + .board__cell-label,
+    &:checked(:disabled) + .board__cell-label {
+      background-color: red;
+    }
     
     &:focus:not(:disabled) + .board__cell-label::before,
     &:checked:not(:disabled) + .board__cell-label::before {
@@ -42,5 +51,6 @@
     grid-column: 1 / -1;
     display: flex;
     justify-content: space-around;
+    padding: 8px 4px;
   }
 }

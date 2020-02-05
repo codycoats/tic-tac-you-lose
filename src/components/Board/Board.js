@@ -155,14 +155,14 @@ const Board = () => {
 
         if(cell === PLAYER_VALUE) {
           cellMarkup = (
-            <div className="board__cell" key={index}>
+            <div className="board__cell board__cell--filled" key={index}>
               <input className="board__cell-control" type="radio" id={id} name={RADIO_GROUP_NAME} value={index} disabled />
               <label className="board__cell-label" htmlFor={id}>⭕️</label>
             </div>
           );
         } else if( cell === BOT_VALUE) {
           cellMarkup = (
-            <div className="board__cell" key={index}>
+            <div className="board__cell board__cell--filled" key={index}>
               <input className="board__cell-control" type="radio" id={id} name={RADIO_GROUP_NAME} value={index} disabled />
               <label className="board__cell-label" htmlFor={id}>❌</label>
             </div>
