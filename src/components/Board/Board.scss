@@ -1,0 +1,29 @@
+.board {
+  $board-size: 3; // assume square board
+
+  background-color: #ccc;
+  display: grid;
+  grid-template-columns: repeat($board-size, 1fr);
+  grid-template-rows: repeat($board-size, 1fr);
+  padding: 16px;
+
+  &__cell {
+    width: 100%;
+    background-color: white;
+    border: 4px solid black;
+
+    label {
+      display: block;
+      width: 100%;
+    }
+
+    input[checked] + label {
+      background-color: red;
+    }
+  }
+
+  [type="submit"] {
+    margin: 24px;
+    grid-column: 2;
+  }
+}
