@@ -6,7 +6,6 @@ const BOARD_SIZE = 3;
 const boardReducer = (state, action) => {
   const type = action.type;
 
-  console.log({type})
   // User didn't say anything
   if(type === 'foo') {
 
@@ -35,17 +34,42 @@ const boardReducer = (state, action) => {
   return stateWithBot;
 }
 
+const isWinningBoard = (board) => {
+  const winningBoards = [
+    [0,1,2],
+    [3,4,5],
+    [6,7,8],
+    [0,4,8],
+    [2,4,6],
+    [0,3,6],
+    [1,4,7],
+    [2,5,8]
+  ];
+
+  const found = winningBoards.find((winner) => {
+    return winner.reduce((prev, current, index) => {
+      return prev && board[index] === -1;
+    })
+  });
+
+  return Boolean(found);
+}
+
+const INTIAL_BOARD = [-1, ...Array((BOARD_SIZE* BOARD_SIZE) -1)];
+
 const Board = () => {
-  const [boardState, dispatch] = useReducer(boardReducer, Array.apply(undefined, Array(BOARD_SIZE* BOARD_SIZE)));
+  const [boardState, dispatch] = useReducer(boardReducer, Array.apply(undefined, INTIAL_BOARD));
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const { value } = e.target['board'];
-    console.log("handleSubmit", value)
     dispatch({type: parseInt(value, 10)}) 
   }
 
   // Detect boardState as 'won'
+  if(isWinningBoard(boardState)) {
+    return (<h1>You lose, told you!</h1>)
+  }
 
   return (
     <>
@@ -54,7 +78,6 @@ const Board = () => {
       {boardState.map((cell, index) => {
         const id = `cell-${index}`;
         let cellMarkup;
-        console.log({cell})
 
         if(cell === 1) {
           cellMarkup = (
@@ -81,52 +104,6 @@ const Board = () => {
 
         return cellMarkup;
       })}
-
-
-      {/* <label htmlFor="top-left">
-        Top left
-      </label>
-      <input type="radio" id="top-left" name={RADIO_GROUP_NAME} value="0"/>
-
-      <label htmlFor="top-middle">
-        Top middle
-      </label>
-      <input type="radio" id="top-middle" name={RADIO_GROUP_NAME} value="1"/>
-
-      <label htmlFor="top-right">
-        Top right
-      </label>
-      <input type="radio" id="top-right" name={RADIO_GROUP_NAME} value="2"/>
-
-      <label htmlFor="middle-left">
-        Middle left
-      </label>
-      <input type="radio" id="middle-left" name={RADIO_GROUP_NAME} value="3"/>
-
-      <label htmlFor="center">
-        Center
-      </label>
-      <input type="radio" id="center" name={RADIO_GROUP_NAME} value="4"/>
-
-      <label htmlFor="middle-right">
-        Middle right
-      </label>
-      <input type="radio" id="middle-right" name={RADIO_GROUP_NAME} value="5"/>
-
-      <label htmlFor="bottom-left">
-        Bottom left
-      </label>
-      <input type="radio" id="bottom-left" name={RADIO_GROUP_NAME} value="6"/>
-
-      <label htmlFor="bottom-middle">
-        Bottom middle
-      </label>
-      <input type="radio" id="bottom-middle" name={RADIO_GROUP_NAME} value="7"/>
-
-      <label htmlFor="bottom-right">
-        Bottom right
-      </label>
-      <input type="radio" id="bottom-right" name={RADIO_GROUP_NAME} value="8"/> */}
 
       <button type="submit">
         Submit
