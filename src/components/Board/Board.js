@@ -192,9 +192,12 @@ const Board = () => {
   const winner = hasBotWon(boardState);
   const draw = !winner && boardState.indexOf(undefined) === -1;
 
+  const hasUserPlayed = boardState.indexOf(PLAYER_VALUE) !== -1;
+
   return (
     <>
     {winner && <em>You lose, told you!</em>}
+    {!hasUserPlayed && <em>You‘re go.</em>}
     {draw && <em>Fine, well at least I didn't lose.</em>}
     <form className="board" onSubmit={handleSubmit}>
 
@@ -241,7 +244,7 @@ const Board = () => {
           <button className="action board__action" onClick={handleReset} type="reset">Lose again</button> :
           (
             <>
-              <button className="action board__action" onClick={handleReset} type="reset">Give up!</button>
+              {hasUserPlayed && <button className="action board__action" onClick={handleReset} type="reset">Give up!</button>}
               <button className="action board__action" type="submit">Submit</button> 
             </>
           )
