@@ -8,6 +8,7 @@ const PLAYER_VALUE = 1;
 
 const CENTER = 4;
 const CORNERS = [0, 2, 6, 8];
+const SIDES = [1, 3, 5, 7];
 const WINNING_BOARDS = [
   [0,1,2],
   [3,4,5],
@@ -128,6 +129,18 @@ const boardReducer = (state, action) => {
 
       if(corner === undefined) {
         newBotMove = CORNERS[i];
+        break;
+      }
+    }
+  }
+
+  // Lastly pick an empty side
+  if(!newBotMove) {
+    for(let i = 0; i < SIDES.length; i++) {
+      let side = stateWithBot[SIDES[i]];
+
+      if(side === undefined) {
+        newBotMove = SIDES[i];
         break;
       }
     }
