@@ -52,9 +52,29 @@ const boardReducer = (state, action) => {
     return result;
   });
 
-  // Add bot's move
+  // Add bot's move according to Newell & Simon's strategy https://en.wikipedia.org/wiki/Tic-tac-toe#Strategy
   const stateWithBot = [...newState];
   let newBotMove;
+
+  // Check if there a potential win
+  if(botMoves.length >= 2 && !newBotMove) {
+    for(let i = 0; i < WINNING_BOARDS.length; i++) {
+      const winningBoard = [...WINNING_BOARDS[i]];
+  
+      botMoves.forEach((value) => {
+        const moveInBoard = winningBoard.indexOf(value);
+  
+        if(moveInBoard !== -1) {
+          winningBoard.splice(moveInBoard, 1);
+        }
+      })
+      
+      if(winningBoard.length === 1 && stateWithBot[winningBoard[0]] === undefined) {
+        newBotMove = winningBoard[0];
+        break;
+      }
+    }
+  } 
 
   // Block user from winning
   if(userMoves.length >= 2) {
@@ -75,26 +95,6 @@ const boardReducer = (state, action) => {
       }
     }
   }
-  
-  // Check if there a potential win
-  if(botMoves.length >= 2 && !newBotMove) {
-    for(let i = 0; i < WINNING_BOARDS.length; i++) {
-      const winningBoard = [...WINNING_BOARDS[i]];
-  
-      botMoves.forEach((value) => {
-        const moveInBoard = winningBoard.indexOf(value);
-  
-        if(moveInBoard !== -1) {
-          winningBoard.splice(moveInBoard, 1);
-        }
-      })
-      
-      if(winningBoard.length === 1 && stateWithBot[winningBoard[0]] === undefined) {
-        newBotMove = winningBoard[0];
-        break;
-      }
-    }
-  } 
   
   // Otherwise pick a corner
   if(!newBotMove) {
