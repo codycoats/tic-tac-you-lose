@@ -1,0 +1,20 @@
+.action {
+  padding: 8px 4px;
+  border: 0;
+  border-radius: 2px;
+  color: white;
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
+
+  &[type="submit"] {
+    background-color: green;
+  }
+
+  &[type="reset"] {
+    color: red;
+    border: 1px solid red;
+  }
+}

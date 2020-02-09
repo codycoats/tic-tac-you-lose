@@ -13,5 +13,6 @@ body {
   padding: 0;
 }
 
+@import './styles/action';
 @import './components/App/App';
 @import './components/Board/Board';

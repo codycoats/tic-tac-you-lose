@@ -218,11 +218,11 @@ const Board = () => {
 
       <div className="board__actions">
         {(winner || draw) ? 
-          <button className="board__action" onClick={handleReset}>Lose again</button> :
+          <button className="action board__action" onClick={handleReset} type="reset">Lose again</button> :
           (
             <>
-              <button className="board__action" onClick={handleReset}>Give up!</button>
-              <button className="board__action" type="submit">Submit</button> 
+              <button className="action board__action" onClick={handleReset} type="reset">Give up!</button>
+              <button className="action board__action" type="submit">Submit</button> 
             </>
           )
         }
