@@ -6,6 +6,8 @@ const BOARD_SIZE = 3;
 const BOT_VALUE = -1;
 const PLAYER_VALUE = 1;
 
+const CENTER = 4;
+const CORNERS = [0, 2, 6, 8];
 const WINNING_BOARDS = [
   [0,1,2],
   [3,4,5],
@@ -95,15 +97,37 @@ const boardReducer = (state, action) => {
       }
     }
   }
-  
-  // Otherwise pick a corner
+
+  // Is the center available?
+  if(!newBotMove && stateWithBot[CENTER] === undefined) {
+    newBotMove = CENTER;
+  }
+
+  // Pick an opposite corner 
   if(!newBotMove) {
-    const corners = [0, 2, 6, 8];
-    for(let i = 0; i < corners.length; i++) {
-      let corner = stateWithBot[corners[i]];
+    const CORNER_OPPOSITES = {
+      0: 8,
+      2: 6,
+      6: 2,
+      8: 0
+    };
+
+    for(let i=0; i < CORNERS.length; i++) {
+      let corner = stateWithBot[CORNERS[i]];
+      if(corner === PLAYER_VALUE) {
+        newBotMove = CORNER_OPPOSITES[corner];
+        break;
+      }
+    }
+  }
+  
+  // Otherwise pick an empty corner
+  if(!newBotMove) {
+    for(let i = 0; i < CORNERS.length; i++) {
+      let corner = stateWithBot[CORNERS[i]];
 
       if(corner === undefined) {
-        newBotMove = corners[i];
+        newBotMove = CORNERS[i];
         break;
       }
     }
