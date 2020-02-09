@@ -165,6 +165,18 @@ const hasBotWon = (board) => {
   return Boolean(found);
 }
 
+const INDEX_LABEL_MAPPING = {
+  0: 'Top left',
+  1: 'Top middle',
+  2: 'Top right',
+  3: 'Middle left',
+  4: 'Center',
+  5: 'Middle right',
+  6: 'Bottom left',
+  7: 'Bottom middle',
+  8: 'Bottom right'
+}
+
 const Board = () => {
   const [boardState, dispatch] = useReducer(boardReducer, Array.apply(undefined, [...INTIAL_BOARD]));
   const handleSubmit = (e) => {
@@ -194,21 +206,29 @@ const Board = () => {
           cellMarkup = (
             <div className="board__cell board__cell--filled" key={index}>
               <input className="board__cell-control" type="radio" id={id} name={RADIO_GROUP_NAME} value={index} disabled />
-              <label className="board__cell-label" htmlFor={id}>⭕️</label>
+              <label className="board__cell-label" htmlFor={id}>
+                <span className="sr-only">{INDEX_LABEL_MAPPING[index]}</span>
+                <span role="img" aria-label="O">⭕️</span>
+              </label>
             </div>
           );
         } else if( cell === BOT_VALUE) {
           cellMarkup = (
             <div className="board__cell board__cell--filled" key={index}>
               <input className="board__cell-control" type="radio" id={id} name={RADIO_GROUP_NAME} value={index} disabled />
-              <label className="board__cell-label" htmlFor={id}>❌</label>
+              <label className="board__cell-label" htmlFor={id}>
+                <span className="sr-only">{INDEX_LABEL_MAPPING[index]}</span>
+                <span role="img" aria-label="X">❌</span>
+              </label>
             </div>
           );
         } else {
           cellMarkup = (
             <div className="board__cell" key={index}>
               <input className="board__cell-control" type="radio" id={id} name={RADIO_GROUP_NAME} value={index}/>
-              <label className="board__cell-label" htmlFor={id}></label>
+              <label className="board__cell-label" htmlFor={id}>
+                <span className="sr-only">{INDEX_LABEL_MAPPING[index]}</span>
+              </label>
             </div>
           );
         }
