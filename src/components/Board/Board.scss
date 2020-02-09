@@ -5,6 +5,7 @@
   grid-template-columns: repeat($board-size, max-content);
   grid-template-rows: repeat($board-size, max-content);
   border: 4px solid black;
+  margin: 16px;
 
   &__cell {
     background-color: white;

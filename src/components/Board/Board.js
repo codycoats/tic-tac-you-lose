@@ -182,8 +182,8 @@ const Board = () => {
 
   return (
     <>
-    {winner && <h2>You lose, told you!</h2>}
-    {draw && <h2>Fine, well at least I didn't lose.</h2>}
+    {winner && <em>You lose, told you!</em>}
+    {draw && <em>Fine, well at least I didn't lose.</em>}
     <form className="board" onSubmit={handleSubmit}>
 
       {boardState.map((cell, index) => {
