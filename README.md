@@ -1,3 +1,3 @@
 # tic-tac-you-lose
 
-`yarn start`
+`yarn && yarn start`
