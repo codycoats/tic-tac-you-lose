@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/tic-tac-you-lose/static/css/main.a325f988.chunk.css",
+    "main.js": "/tic-tac-you-lose/static/js/main.5d785792.chunk.js",
+    "main.js.map": "/tic-tac-you-lose/static/js/main.5d785792.chunk.js.map",
+    "runtime-main.js": "/tic-tac-you-lose/static/js/runtime-main.a7b7515c.js",
+    "runtime-main.js.map": "/tic-tac-you-lose/static/js/runtime-main.a7b7515c.js.map",
+    "static/js/2.9a08824d.chunk.js": "/tic-tac-you-lose/static/js/2.9a08824d.chunk.js",
+    "static/js/2.9a08824d.chunk.js.map": "/tic-tac-you-lose/static/js/2.9a08824d.chunk.js.map",
+    "index.html": "/tic-tac-you-lose/index.html",
+    "precache-manifest.446e944cba675035feaa3854a471b195.js": "/tic-tac-you-lose/precache-manifest.446e944cba675035feaa3854a471b195.js",
+    "service-worker.js": "/tic-tac-you-lose/service-worker.js",
+    "static/css/main.a325f988.chunk.css.map": "/tic-tac-you-lose/static/css/main.a325f988.chunk.css.map",
+    "static/js/2.9a08824d.chunk.js.LICENSE.txt": "/tic-tac-you-lose/static/js/2.9a08824d.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a7b7515c.js",
+    "static/js/2.9a08824d.chunk.js",
+    "static/css/main.a325f988.chunk.css",
+    "static/js/main.5d785792.chunk.js"
+  ]
+}
