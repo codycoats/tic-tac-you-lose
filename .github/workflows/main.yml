@@ -10,4 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Deploy to gh pages
-      run: yarn && yarn deploy
+      run: |
+        git config --global user.email "gh-bot@codycoats.com"
+        git config --global user.name "Deploy Bot"
+        yarn && yarn deploy
