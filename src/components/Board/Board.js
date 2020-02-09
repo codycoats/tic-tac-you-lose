@@ -182,8 +182,8 @@ const Board = () => {
 
   return (
     <>
-    {winner && <h2>You lose, told you!</h2>}
-    {draw && <h2>Fine, well at least I didn't lose.</h2>}
+    {winner && <em>You lose, told you!</em>}
+    {draw && <em>Fine, well at least I didn't lose.</em>}
     <form className="board" onSubmit={handleSubmit}>
 
       {boardState.map((cell, index) => {
@@ -218,11 +218,11 @@ const Board = () => {
 
       <div className="board__actions">
         {(winner || draw) ? 
-          <button className="board__action" onClick={handleReset}>Lose again</button> :
+          <button className="action board__action" onClick={handleReset} type="reset">Lose again</button> :
           (
             <>
-              <button className="board__action" onClick={handleReset}>Give up!</button>
-              <button className="board__action" type="submit">Submit</button> 
+              <button className="action board__action" onClick={handleReset} type="reset">Give up!</button>
+              <button className="action board__action" type="submit">Submit</button> 
             </>
           )
         }

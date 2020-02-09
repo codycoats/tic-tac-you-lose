@@ -5,6 +5,7 @@
   grid-template-columns: repeat($board-size, max-content);
   grid-template-rows: repeat($board-size, max-content);
   border: 4px solid black;
+  margin: 16px;
 
   &__cell {
     background-color: white;
@@ -32,8 +33,13 @@
     right: 0;
 
     &:focus:not(:disabled) + .board__cell-label,
-    &:checked(:disabled) + .board__cell-label {
-      background-color: red;
+    &:checked:not(:disabled) + .board__cell-label {
+      background-color: rgba(0, 255, 0, 0.3);
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     
     &:focus:not(:disabled) + .board__cell-label::before,
@@ -52,5 +58,13 @@
     display: flex;
     justify-content: space-around;
     padding: 8px 4px;
+
+    & > * {
+      flex-grow: 1;
+    }
+
+    & > * + * {
+      margin-inline-start: 8px;
+    }
   }
 }
